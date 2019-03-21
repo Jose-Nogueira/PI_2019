@@ -24,7 +24,7 @@ $count++;
 break;
 }
 }
-$result = mysqli_query($sql,"SELECT * FROM setor WHERE id=".$id_setor);
+$result = mysqli_query($sql,"SELECT * FROM setor WHERE id_out_pin=".$id_setor);
 while($rr = mysqli_fetch_array($result)){
 if($rr['id'] == $id){
 mysqli_close($sql);
