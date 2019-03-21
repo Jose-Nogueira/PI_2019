@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.6.6deb4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: 18-Fev-2019 às 01:09
--- Versão do servidor: 10.1.37-MariaDB
--- versão do PHP: 7.3.1
+-- Host: localhost:3306
+-- Generation Time: 16-Mar-2019 às 10:54
+-- Versão do servidor: 10.1.37-MariaDB-0+deb9u1
+-- PHP Version: 7.0.33-0+deb9u3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -34,15 +32,17 @@ CREATE TABLE `esplist` (
   `IP` varchar(15) NOT NULL,
   `X` int(11) NOT NULL,
   `Y` int(11) NOT NULL,
-  `gold` int(11) NOT NULL
+  `gold` int(11) NOT NULL,
+  `Setor_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `esplist`
 --
 
-INSERT INTO `esplist` (`id`, `Nome`, `IP`, `X`, `Y`, `gold`) VALUES
-(3, 'asd', '1234rg', 12, 12, 355);
+INSERT INTO `esplist` (`id`, `Nome`, `IP`, `X`, `Y`, `gold`, `Setor_id`) VALUES
+(3, 'esp_porta', '1234rg', 12, 12, 600, 1),
+(4, 'esp_janela', '1234', 12, 12, 850, 2);
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,8 @@ CREATE TABLE `esp_stats` (
 --
 
 INSERT INTO `esp_stats` (`id`, `id_esp`, `gold`, `pid_in`, `pid_out`, `time`) VALUES
-(4, 3, 344, 348, 346, '2019-02-13 20:59:51');
+(1, 4, 850, 769, 255, '2019-03-16 10:53:58'),
+(2, 3, 600, 952, 0, '2019-03-16 10:54:35');
 
 -- --------------------------------------------------------
 
@@ -74,6 +75,7 @@ INSERT INTO `esp_stats` (`id`, `id_esp`, `gold`, `pid_in`, `pid_out`, `time`) VA
 
 CREATE TABLE `kw_h` (
   `id` int(11) NOT NULL,
+  `id_setor` int(11) NOT NULL,
   `w` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -91,15 +93,17 @@ CREATE TABLE `setor` (
   `y` int(11) NOT NULL,
   `l` int(11) NOT NULL,
   `c` int(11) NOT NULL,
-  `mode` enum('auto','on','off') NOT NULL
+  `mode` enum('auto','on','off') NOT NULL,
+  `id_out_pin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `setor`
 --
 
-INSERT INTO `setor` (`id`, `Nome`, `x`, `y`, `l`, `c`, `mode`) VALUES
-(1, 'qwe', 3, 4, 99, 99, 'on');
+INSERT INTO `setor` (`id`, `Nome`, `x`, `y`, `l`, `c`, `mode`, `id_out_pin`) VALUES
+(1, 'porta', 3, 4, 99, 99, 'auto', 1),
+(2, 'janela', 11, 11, 11, 11, 'auto', 2);
 
 -- --------------------------------------------------------
 
@@ -110,7 +114,8 @@ INSERT INTO `setor` (`id`, `Nome`, `x`, `y`, `l`, `c`, `mode`) VALUES
 CREATE TABLE `status` (
   `id` int(11) NOT NULL,
   `id_setor` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `status` enum('on','off') NOT NULL,
+  `mode` enum('auto','on','off') NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -123,7 +128,8 @@ CREATE TABLE `status` (
 --
 ALTER TABLE `esplist`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`),
+  ADD KEY `esp_to_setor` (`Setor_id`);
 
 --
 -- Indexes for table `esp_stats`
@@ -134,10 +140,18 @@ ALTER TABLE `esp_stats`
   ADD KEY `time` (`time`);
 
 --
+-- Indexes for table `kw_h`
+--
+ALTER TABLE `kw_h`
+  ADD KEY `id` (`id`),
+  ADD KEY `setor_kwh` (`id_setor`);
+
+--
 -- Indexes for table `setor`
 --
 ALTER TABLE `setor`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_out_pin` (`id_out_pin`);
 
 --
 -- Indexes for table `status`
@@ -155,29 +169,36 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT for table `esplist`
 --
 ALTER TABLE `esplist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `esp_stats`
 --
 ALTER TABLE `esp_stats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `kw_h`
+--
+ALTER TABLE `kw_h`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `setor`
 --
 ALTER TABLE `setor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `status`
 --
 ALTER TABLE `status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Limitadores para a tabela `esplist`
+--
+ALTER TABLE `esplist`
+  ADD CONSTRAINT `esp_to_setor` FOREIGN KEY (`Setor_id`) REFERENCES `setor` (`id_out_pin`);
 
 --
 -- Limitadores para a tabela `esp_stats`
@@ -186,11 +207,16 @@ ALTER TABLE `esp_stats`
   ADD CONSTRAINT `esp_index` FOREIGN KEY (`id_esp`) REFERENCES `esplist` (`id`);
 
 --
+-- Limitadores para a tabela `kw_h`
+--
+ALTER TABLE `kw_h`
+  ADD CONSTRAINT `setor_kwh` FOREIGN KEY (`id_setor`) REFERENCES `setor` (`id_out_pin`);
+
+--
 -- Limitadores para a tabela `status`
 --
 ALTER TABLE `status`
-  ADD CONSTRAINT `setor` FOREIGN KEY (`id_setor`) REFERENCES `setor` (`id`);
-COMMIT;
+  ADD CONSTRAINT `setor` FOREIGN KEY (`id_setor`) REFERENCES `setor` (`id_out_pin`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
