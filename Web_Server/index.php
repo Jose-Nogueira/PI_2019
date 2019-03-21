@@ -18,6 +18,3 @@ if(!testlog()){
 		
 }
 ?>
-</div>
-</body>
-</html>
