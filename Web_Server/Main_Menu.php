@@ -54,9 +54,9 @@
                 <span data-feather="zap"></span>
                 Consumos <span class="sr-only">(current)</span>
               </a>
-              <div id="collapseOne" class="collapse hide" data-parent="#containerFluid">
-                <a class="dropdown-item text-light" href="#">No setor</a>
-                <a class="dropdown-item text-light" href="#">Totais</a>
+              <div id="collapseOne" class="<?php echo ((@$_GET['pg'] == "consumossetor")||(@$_GET['pg'] == "consumostotal") ? "collapse show":"collapse hide");?>" data-parent="#containerFluid">
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "consumossetor") ? "text-primary":"text-light");?>" href="?pg=consumossetor">No setor</a>
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "consumostotal") ? "text-primary":"text-light");?>" href="?pg=consumostotal">Totais</a>
               </div>
             </li>
             <li class="nav-item">
@@ -65,9 +65,9 @@
                 <span data-feather="home"></span>
                 Setores
               </a>
-              <div id="collapseTwo" class="collapse hide" data-parent="#containerFluid">
-                <a class="dropdown-item text-light" href="#">Estado</a>
-                <a class="dropdown-item text-light" href="#">Configuração</a>
+              <div id="collapseTwo" class="<?php echo ((@$_GET['pg'] == "setorstatus")||(@$_GET['pg'] == "setorconf") ? "collapse show":"collapse hide");?>" data-parent="#containerFluid">
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "setorstatus") ? "text-primary":"text-light");?>" href="?pg=setorstatus">Estado</a>
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "setorconf") ? "text-primary":"text-light");?>" href="?pg=setorconf">Configuração</a>
               </div>
             </li>
             <li class="nav-item">
@@ -76,9 +76,9 @@
                 <span data-feather="wifi"></span>
                 Sensores
               </a>
-              <div id="collapseThree" class="collapse hide" data-parent="#containerFluid">
-                <a class="dropdown-item text-light" href="#">Valores lidos</a>
-                <a class="dropdown-item text-light" href="#">Estado</a>
+              <div id="collapseThree" class="<?php echo ((@$_GET['pg'] == "sensorval")||(@$_GET['pg'] == "sensorstatus") ? "collapse show":"collapse hide");?>" data-parent="#containerFluid">
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "sensorval") ? "text-primary":"text-light");?>" href="?pg=sensorval">Valores lidos</a>
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "sensorstatus") ? "text-primary":"text-light");?>" href="?pg=sensorstatus">Estado</a>
               </div>
             </li>
 
@@ -86,7 +86,14 @@
 
         </div>
       </nav>
-
+<?php
+//if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
+//else if(@$_GET['pg'] == "setorconf") require("Setores_conf.html");
+//else if(@$_GET['pg'] == "sensorval") require("Setores_conf.html");
+//else if(@$_GET['pg'] == "sensorstatus") require("Setores_conf.html");
+//else if(@$_GET['pg'] == "consumossetor") require("Setores_conf.html");
+//else if(@$_GET['pg'] == "setorconsumostotalconf") require("Setores_conf.html");
+?>
     </div>
   </div>
 </body>
