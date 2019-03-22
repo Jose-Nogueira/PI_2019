@@ -27,23 +27,23 @@ function testlog(){
 function scemail($email){
 	if(strlen($email)>5 && (strrpos($email, ' ') == false && strrpos($email, '=') == false)){
 	logreg("scemail", $email);
-	require('../vars.php');
+	require('vars.php');
 	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$email = mysqli_real_escape_string($sql, $email);
-		$result = mysqli_query($sql,"SELECT * FROM users WHERE email='".$email."'");
-		while($rr = mysqli_fetch_array($result)){
-			if($rr['email'] == $email){
-				mysqli_close($sql);
-				return array($rr['id'], $email, $rr['pass'], $rr['log']);	
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$email = mysqli_real_escape_string($sql, $email);
+			$result = mysqli_query($sql,"SELECT * FROM users WHERE email='".$email."'");
+			while($rr = mysqli_fetch_array($result)){
+				if($rr['email'] == $email){
+					mysqli_close($sql);
+					return array($rr['id'], $email, $rr['pass'], $rr['log']);	
+				}
 			}
 		}
-	}
 	}
 	catch(Exception $e){
 		return false;	
@@ -54,7 +54,7 @@ function scemail($email){
 //id
 function scid($id){
 	if($id >= 0){
-	require('../vars.php');
+	require('vars.php');
 	try{
 	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
 	if(mysqli_connect_errno())
@@ -81,7 +81,7 @@ function scid($id){
 function editpass($email, $newpas){
 	if($email && $newpas){
 	logreg("editpass", $email);
-	require('../vars.php');
+	require('vars.php');
 	try{
 	$list = scemail($email);
 	if($list){
@@ -109,7 +109,7 @@ function editpass($email, $newpas){
 function loginlock($id, $userid){
 	if($id && $userid){
 	logreg("loginlock", "id:" . $id. ", Userid:" . $userid);
-	require('../vars.php');
+	require('vars.php');
 	try{
 	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
 	if(mysqli_connect_errno())
@@ -150,6 +150,7 @@ function logout(){
 	logreg("logout", @$_SESSION['email']);
 	unset($_SESSION['sessid']);
 	unset($_SESSION['email']);
+	unset($_SESSION['user-agent']);
 	setcookie('PHPSESSID', '' , time()-3600);
 	setcookie('sessid','',time()-3600);
 	setcookie('email','',time()-3600);
@@ -377,7 +378,7 @@ function id_not($id){
 function reguser($email, $pass){
 	if(strlen($email)>5 && strlen($pass) >100){
 	logreg("reguser", "email:" . $email);
-	require('../vars.php');
+	require('vars.php');
 	try{
 	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
 	$list = '';
