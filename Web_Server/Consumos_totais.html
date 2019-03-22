@@ -1,90 +1,64 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <title>Scient</title>
+<div class="card" style="width: 22rem;">
+  <div class="card-body">
+    <h5 class="card-title">Consumo total</h5>
+    <p class="card-title">xxxx KWh</p>
+  </div>
+</div>
+<canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1490" height="629"
+  style="display: block; width: 1490px; height: 629px;"></canvas>
 
-    <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/"> -->
+<script>
+  (function () {
+    'use strict'
 
-    <!-- Bootstrap core CSS -->
-<link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    feather.replace()
 
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday'
+        ],
+        datasets: [{
+          data: [
+            15339,
+            21345,
+            18483,
+            24003,
+            23489,
+            24092,
+            12034
+          ],
+          lineTension: 0,
+          backgroundColor: 'transparent',
+          borderColor: '#007bff',
+          borderWidth: 4,
+          pointBackgroundColor: '#007bff'
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false
+            }
+          }]
+        },
+        legend: {
+          display: false
         }
       }
-    </style>
-    <!-- Custom styles for this template -->
-    <!-- <link href="bootstrap-4.3.1-dist/dashboard.css" rel="stylesheet"> -->
-  </head>
-  <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"> Scient </a>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
-    </li>
-  </ul>
-</nav>
+    })
+  }())
 
-<div class="container-fluid" id="containerFluid">
-  <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active bg-dark" href="#" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              <span data-feather="zap"></span>
-              Consumos <span class="sr-only">(current)</span>
-            </a>
-                <a class="dropdown-item text-light" href="#">No setor</a>
-                <a class="dropdown-item text-primary" href="#">Totais</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light bg-dark" href="#" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
-              <span data-feather="home"></span>
-              Setores
-            </a>
-            <div id="collapseTwo" class="collapse show" data-parent="#containerFluid">
-                <a class="dropdown-item text-light" href="#">Estado</a>
-                <a class="dropdown-item text-light" href="#">Configuração</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light bg-dark" href="#" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
-              <span data-feather="wifi"></span>
-              Sensores
-            </a>
-            <div id="collapseThree" class="collapse show" data-parent="#containerFluid">
-                <a class="dropdown-item text-light" href="#">Valores lidos</a>
-                <a class="dropdown-item text-light" href="#">Estado</a>
-            </div>
-          </li>
-          
-        </ul>
 
-      </div>
-    </nav>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
-<link href="dashboard.css" rel="stylesheet">
-    <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
-        <script src="feather.min.js"></script>
-        <script src="chart.min.js"></script>
-        <script src="dashboard.js"></script></body>
-</html>
+</script>

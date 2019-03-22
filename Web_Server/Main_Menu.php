@@ -86,24 +86,24 @@
 
         </div>
       </nav>
-<?php
-//if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
-//else if(@$_GET['pg'] == "setorconf") require("Setores_conf.html");
-//else if(@$_GET['pg'] == "sensorval") require("Sensor_values.html");
-//else if(@$_GET['pg'] == "sensorstatus") require("sensor_estado.html");
-//else if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.html");
-//else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.html");
-?>
+      <script src="jquery-3.3.1.slim.min.js"></script>
+      <link href="dashboard.css" rel="stylesheet">
+      <script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
+      <script src="feather.min.js"></script>
+      <script src="Chart.min.js"></script>
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <?php
+        if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.html");
+        else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.html");
+        //else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
+        //else if(@$_GET['pg'] == "setorconf") require("Setores_conf.html");
+        //else if(@$_GET['pg'] == "sensorval") require("Sensor_values.html");
+        //else if(@$_GET['pg'] == "sensorstatus") require("sensor_estado.html");
+        ?>
+      </main>
     </div>
   </div>
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<link href="dashboard.css" rel="stylesheet">
-<script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-<script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
-<script src="feather.min.js"></script>
-<script src="chart.min.js"></script>
-<script src="dashboard.js"></script>
 </body>
 
 </html>
