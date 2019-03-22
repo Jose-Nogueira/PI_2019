@@ -89,10 +89,10 @@
 <?php
 //if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
 //else if(@$_GET['pg'] == "setorconf") require("Setores_conf.html");
-//else if(@$_GET['pg'] == "sensorval") require("Setores_conf.html");
-//else if(@$_GET['pg'] == "sensorstatus") require("Setores_conf.html");
-//else if(@$_GET['pg'] == "consumossetor") require("Setores_conf.html");
-//else if(@$_GET['pg'] == "setorconsumostotalconf") require("Setores_conf.html");
+//else if(@$_GET['pg'] == "sensorval") require("Sensor_values.html");
+//else if(@$_GET['pg'] == "sensorstatus") require("sensor_estado.html");
+//else if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.html");
+//else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.html");
 ?>
     </div>
   </div>
