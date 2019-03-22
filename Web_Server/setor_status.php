@@ -11,7 +11,7 @@ if(isset($_GET["id"]) & isset($_GET["status"]) & isset($_GET["mode"])){
 		$id = mysqli_real_escape_string($sql, $_GET["id"]);
         $status = mysqli_real_escape_string($sql, $_GET["status"]);
         $mode = mysqli_real_escape_string($sql, $_GET["mode"]);
-        $result = mysqli_query($sql,"INSERT INTO `status`(`id_setor`, `status`, `mode`) VALUES (" . $id . "," . $status . "," . $mode . ")");
+        $result = mysqli_query($sql,"INSERT INTO `status`(`id_setor`, `status`, `mode`) VALUES (" . $id . ",'" . $status . "','" . $mode . "')");
         if($result) echo("valid");
         else echo("false");	
 		}
