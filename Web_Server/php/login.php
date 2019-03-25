@@ -175,6 +175,108 @@ function randid(){
 	return md5($ret_str);
 }
 
+function w_setor_data($id=0,$data_size=1000){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$size = mysqli_real_escape_string($sql, data_size);
+			$result = mysqli_query($sql,"SELECT * FROM `Kw_h` WHERE `setor_id`=".$id_." ORDER BY `id` DESC LIMIT ". 0 ." , ".$size."");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i = 0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['w'], $rr['time']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function get_setors_mode(){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$result = mysqli_query($sql,"SELECT * FROM `setor`");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i=0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['id_out_pin'], $rr['mode']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function set_setor_mode($id=0, $mode="auto"){
+	if(testlog()){
+	require('vars.php');
+	logreg("set_setor_mode(", @$_SESSION['email'] . ", id:" . $id . ", mode:" . $mode);
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		if($mode != "auto" && $mode != "on" && $mode != "off"){
+			mysqli_close($sql);
+			return false;
+		}
+		$id_ = mysqli_real_escape_string($sql, $id);
+		$result = mysqli_query($sql,"UPDATE `setor` SET `mode`='" . $mode . "' WHERE `id_out_pin`=".$id_);
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		else{
+			mysqli_close($sql);
+			return true;
+		}
+		
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;
+}
+
 //not used
 function antibot($id, $val){
 	logreg("antibot", $id . ", " . $val);
