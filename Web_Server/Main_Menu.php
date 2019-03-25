@@ -104,6 +104,13 @@
     </div>
   </div>
 </body>
-</body>
+
+<script>
+  (function () {
+    'use strict'
+
+    feather.replace()
+  }())
+</script>
 
 </html>
