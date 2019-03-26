@@ -67,7 +67,7 @@
               </a>
               <div id="collapseTwo" class="<?php echo ((@$_GET['pg'] == "setorstatus")||(@$_GET['pg'] == "setorconf") ? "collapse show":"collapse hide");?>" data-parent="#containerFluid">
                 <a class="dropdown-item <?php echo ((@$_GET['pg'] == "setorstatus") ? "text-primary":"text-light");?>" href="?pg=setorstatus">Estado</a>
-                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "setorconf") ? "text-primary":"text-light");?>" href="?pg=setorconf">Configuração</a>
+                <!-- <a class="dropdown-item <?php echo ((@$_GET['pg'] == "setorconf") ? "text-primary":"text-light");?>" href="?pg=setorconf">Configuração</a> -->
               </div>
             </li>
             <li class="nav-item">
@@ -78,7 +78,7 @@
               </a>
               <div id="collapseThree" class="<?php echo ((@$_GET['pg'] == "sensorval")||(@$_GET['pg'] == "sensorstatus") ? "collapse show":"collapse hide");?>" data-parent="#containerFluid">
                 <a class="dropdown-item <?php echo ((@$_GET['pg'] == "sensorval") ? "text-primary":"text-light");?>" href="?pg=sensorval">Valores lidos</a>
-                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "sensorstatus") ? "text-primary":"text-light");?>" href="?pg=sensorstatus">Estado</a>
+                <a class="dropdown-item <?php echo ((@$_GET['pg'] == "sensorstatus") ? "text-primary":"text-light");?>" href="?pg=sensorstatus">Configuração</a>
               </div>
             </li>
 
@@ -97,9 +97,9 @@
         if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.php");
         else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.php");
         else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.php");
-        else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");
+        //else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");
         else if(@$_GET['pg'] == "sensorval") require("Sensor_values.php");
-        //else if(@$_GET['pg'] == "sensorstatus") require("sensor_estado.html");
+        else if(@$_GET['pg'] == "sensorstatus") require("sensor_conf.php");
         ?>
       </main>
     </div>
