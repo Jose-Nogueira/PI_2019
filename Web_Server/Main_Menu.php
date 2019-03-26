@@ -90,7 +90,7 @@
       <link href="dashboard.css" rel="stylesheet">
       <script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
       <script src="feather.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+      <script src="moment.min.js"></script>
       <script src="Chart.min.js"></script>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <?php
