@@ -34,6 +34,9 @@
 </head>
 
 <body>
+  <?php
+    if(@$_GET['vr'] != "app"){
+  ?>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="?pg=home"> Scient </a>
     <ul class="navbar-nav px-3">
@@ -42,9 +45,15 @@
       </li>
     </ul>
   </nav>
+  <?php
+    }
+  ?>
 
   <div class="container-fluid" id="containerFluid">
     <div class="row">
+    <?php
+      if(@$_GET['vr'] != "app"){
+    ?>
       <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
         <div class="sidebar-sticky">
           <ul class="nav flex-column">
@@ -86,6 +95,9 @@
 
         </div>
       </nav>
+      <?php
+        }
+      ?>
       <script src="jquery-3.3.1.slim.min.js"></script>
       <link href="dashboard.css" rel="stylesheet">
       <script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>

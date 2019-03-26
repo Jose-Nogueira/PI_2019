@@ -129,3 +129,7 @@
  [2019-03-26 17:20:39+00:00] : set_setor_mode((jj@jj.cc, id:2, mode:auto);
  [2019-03-26 18:31:06+00:00] : set_esp_gold((jj@jj.cc, id:3, gold:851);
  [2019-03-26 18:38:35+00:00] : set_esp_gold((jj@jj.cc, id:3, gold:850);
+ [2019-03-26 18:52:57+00:00] : scemail(jj@jj.cc);
+ [2019-03-26 18:52:57+00:00] : iniclog(jj@jj.cc);
+ [2019-03-26 19:09:50+00:00] : scemail(jj@jj.cc);
+ [2019-03-26 19:09:50+00:00] : iniclog(jj@jj.cc);
