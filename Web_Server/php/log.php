@@ -127,3 +127,5 @@
  [2019-03-26 17:20:22+00:00] : set_setor_mode((jj@jj.cc, id:2, mode:auto);
  [2019-03-26 17:20:32+00:00] : set_setor_mode((jj@jj.cc, id:2, mode:on);
  [2019-03-26 17:20:39+00:00] : set_setor_mode((jj@jj.cc, id:2, mode:auto);
+ [2019-03-26 18:31:06+00:00] : set_esp_gold((jj@jj.cc, id:3, gold:851);
+ [2019-03-26 18:38:35+00:00] : set_esp_gold((jj@jj.cc, id:3, gold:850);
