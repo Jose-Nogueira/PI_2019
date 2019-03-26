@@ -6,7 +6,7 @@ if(testlog()){
 	<script type="text/javascript">window.location = window.location.href.substring(0,window.location.href.indexOf("?"));</script>
 	<?php
 }
-else if($_POST['submit'] == 'true'){
+else if(@$_POST['submit'] == 'true'){
     $list = true;
     if(strlen(@$_POST['email'])>5){
         $list = scemail(@$_POST['email']);
