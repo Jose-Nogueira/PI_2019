@@ -448,7 +448,7 @@ function get_esps_info(){
 			else{
 				$i=0;
 				while($rr = mysqli_fetch_array($result)){
-						$ll[$i] = array($rr['id'], $rr['nome'], $rr['gold'], $rr['Setor_id']);
+						$ll[$i] = array($rr['id'], $rr['Nome'], $rr['gold'], $rr['Setor_id']);
 						$i++;
 				}
 				return $ll;
