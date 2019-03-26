@@ -90,11 +90,12 @@
       <link href="dashboard.css" rel="stylesheet">
       <script src="bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
       <script src="feather.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
       <script src="Chart.min.js"></script>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <?php
-        if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.html");
-        else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.html");
+        if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.php");
+        else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.php");
         //else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
         else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");
         //else if(@$_GET['pg'] == "sensorval") require("Sensor_values.html");

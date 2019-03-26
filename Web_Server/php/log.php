@@ -102,3 +102,9 @@
  [2019-03-25 18:31:51+00:00] : set_setor_mode((jj@jj.cc, id:1, mode:off);
  [2019-03-25 18:31:55+00:00] : set_setor_mode((jj@jj.cc, id:1, mode:on);
  [2019-03-25 18:31:57+00:00] : set_setor_mode((jj@jj.cc, id:1, mode:off);
+ [2019-03-26 10:32:33+00:00] : scemail(jj@jj.cc);
+ [2019-03-26 10:32:33+00:00] : iniclog(jj@jj.cc);
+ [2019-03-26 10:32:36+00:00] : scemail(jj@jj.cc);
+ [2019-03-26 10:32:36+00:00] : iniclog(jj@jj.cc);
+ [2019-03-26 10:32:36+00:00] : scemail(jj@jj.cc);
+ [2019-03-26 10:32:36+00:00] : loginlock(id:1, Userid:f5ddb296bdae9181a9977a23ad97c428);

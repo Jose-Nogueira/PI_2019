@@ -5,6 +5,8 @@ if ( stripos( $_SERVER[ 'REQUEST_URI' ], basename( __FILE__ ) ) !== FALSE ) {
   die();
   $_SERVER['REDIRECT_STATUS'] = 404;
 }
+//////////////////////////
+// Log file register
 function logreg($funct , $args = "", $file = "php/log.php"){
 	$a = file_get_contents($file);
 	$date = date_create(date('c'), timezone_open(date('e')));
@@ -16,6 +18,10 @@ function logreg($funct , $args = "", $file = "php/log.php"){
 	$sav = $a . "\n [".$dd."] : " . $funct . "(" . $args . ");";//time,new line, inform log
 	file_put_contents($file ,$sav);
 }
+/////////////////////////
+///
+/// Login functions
+///
 //ver se a sessao esta ativa(compara cookies com session(sessid))
 function testlog(){
 	if((isset($_SESSION['sessid']) ? $_SESSION['sessid'] :'false') == @$_COOKIE['sessid'] && @$_SESSION['user-agent'] == @$_SERVER['HTTP_USER_AGENT']){
@@ -174,7 +180,40 @@ function randid(){
 	}
 	return md5($ret_str);
 }
-
+// criar novo utilizador
+function reguser($email, $pass){
+	if(strlen($email)>5 && strlen($pass) >100){
+	logreg("reguser", "email:" . $email);
+	require('vars.php');
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		$email = mysqli_real_escape_string($sql, $email);
+		$pass = mysqli_real_escape_string($sql, $pass);
+		$result = mysqli_query($sql,"INSERT INTO `users`(`email`, `pass`) VALUES ('".$email."','".$pass."')");
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		mysqli_close($sql);
+		return true;
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;
+}
+/////////////////////////////
+///
+/// Power analize
+///
 function w_setor_data($id=0,$data_size=1000){
 	require('vars.php');
 	try{
@@ -186,8 +225,8 @@ function w_setor_data($id=0,$data_size=1000){
 		}
 		else{
 			$id_ = mysqli_real_escape_string($sql, $id);
-			$size = mysqli_real_escape_string($sql, data_size);
-			$result = mysqli_query($sql,"SELECT * FROM `Kw_h` WHERE `setor_id`=".$id_." ORDER BY `id` DESC LIMIT ". 0 ." , ".$size."");
+			$size = mysqli_real_escape_string($sql, $data_size);
+			$result = mysqli_query($sql,"SELECT * FROM `kw_h` WHERE `id_setor`=".$id_." ORDER BY `id` DESC LIMIT 0 , ".$size."");
 			if(!$result){
 				mysqli_close($sql);
 				return false;
@@ -208,7 +247,52 @@ function w_setor_data($id=0,$data_size=1000){
 	}
 	return false;
 }
-
+function total_w_setor_data($data_size=1000){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$size = mysqli_real_escape_string($sql, $data_size);
+			$result = mysqli_query($sql,"SELECT SUM(`w`) As totais, `time`, CONCAT(DATE(`time`),':',HOUR(`time`)) As hora_
+			FROM `kw_h` L
+			INNER JOIN
+			(SELECT `id`, CONCAT(DATE(`time`),':',HOUR(`time`),'-', `id_setor`) As day_
+			FROM `kw_h`
+			GROUP BY day_
+			Order BY `time`
+			DESC LIMIT 0, " . $size . ") As t
+			on L.id = t.id
+			GROUP BY hora_
+			Order BY `time` ASC");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i = 0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['totais'], $rr['time']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+/////////////////////////////
+///
+/// Setor functions
+///
 function get_setors_mode(){
 	require('vars.php');
 	try{
@@ -229,6 +313,37 @@ function get_setors_mode(){
 				while($rr = mysqli_fetch_array($result)){
 						$ll[$i] = array($rr['id_out_pin'], $rr['mode']);
 						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function get_setor_id($id = 0){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$result = mysqli_query($sql,"SELECT * FROM `setor` WHERE `id_out_pin`=" . $id_);
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				while($rr = mysqli_fetch_array($result)){
+						$ll = array($rr['id_out_pin'], $rr['mode'], $rr['Nome']);
 				}
 				return $ll;
 			}
@@ -276,8 +391,210 @@ function set_setor_mode($id=0, $mode="auto"){
 	}
 	return false;
 }
+/////////////////////////////
+///
+/// ESP functions
+///
 
-//not used
+function esp_data($id=0,$data_size=1000){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$size = mysqli_real_escape_string($sql, data_size);
+			$result = mysqli_query($sql,"SELECT * FROM `esp_stats` WHERE `id`=".$id_." ORDER BY `id` DESC LIMIT ". 0 ." , ".$size."");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i = 0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['time'], $rr['gold'], $rr['pid_in'], $rr['pid_out']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function get_esps_info(){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$result = mysqli_query($sql,"SELECT * FROM `esplist`");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i=0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['id'], $rr['nome'], $rr['gold'], $rr['Setor_id']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function get_esp_id($id = 0){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$result = mysqli_query($sql,"SELECT * FROM `esplist` WHERE `id`=" . $id_);
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				while($rr = mysqli_fetch_array($result)){
+						$ll = array($rr['id'], $rr['nome'], $rr['gold'], $rr['Setor_id']);
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function set_esp_gold($id=0, $gold="850"){
+	if(testlog()){
+	require('vars.php');
+	logreg("set_esp_gold(", @$_SESSION['email'] . ", id:" . $id . ", gold:" . $gold);
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		$id_ = mysqli_real_escape_string($sql, $id);
+		$gold_ = mysqli_real_escape_string($sql, $gold);
+		$result = mysqli_query($sql,"UPDATE `esplist` SET `gold`=" . $gold_ . " WHERE `id`=".$id_);
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		else{
+			mysqli_close($sql);
+			return true;
+		}
+		
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;
+}
+
+function set_esp_setor_id($id=0, $setor="0"){
+	if(testlog()){
+	require('vars.php');
+	logreg("set_esp_setor_id(", @$_SESSION['email'] . ", id:" . $id . ", setor:" . $setor);
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		$id_ = mysqli_real_escape_string($sql, $id);
+		$setor_ = mysqli_real_escape_string($sql, $setor);
+		$result = mysqli_query($sql,"UPDATE `esplist` SET `Setor_id`=" . $setor_ . " WHERE `id`=".$id_);
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		else{
+			mysqli_close($sql);
+			return true;
+		}
+		
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;
+}
+
+function set_esp_name($id=0, $name="esp"){
+	if(testlog()){
+	require('vars.php');
+	logreg("set_esp_name(", @$_SESSION['email'] . ", id:" . $id . ", name:" . $name);
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		$id_ = mysqli_real_escape_string($sql, $id);
+		$name_ = mysqli_real_escape_string($sql, $name);
+		$result = mysqli_query($sql,"UPDATE `esplist` SET `Nome`='" . $name_ . "' WHERE `id`=".$id_);
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		else{
+			mysqli_close($sql);
+			return true;
+		}
+		
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;
+}
+//////////////////////////
+///
+///not used
+///
 function antibot($id, $val){
 	logreg("antibot", $id . ", " . $val);
 	require('vars.php');
@@ -301,117 +618,6 @@ function antibot($id, $val){
 	return false;	
 }
 
-function publicar($titulo, $file, $dfile, $noticia){
-	if(testlog()){
-	require('vars.php');
-	$img = uploadimg($file, $dfile);
-	logreg("publicar", @$_SESSION['email'] . ", Titulo:" . $titulo . ", Noticia:" . $noticia . ", Img:" . $img);
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$titulo1 = mysqli_real_escape_string($sql, $titulo);
-		$noticia1 = mysqli_real_escape_string($sql, $noticia);
-		$date = date_create(date('c'), timezone_open(date('e')));
-		date_timezone_set($date, timezone_open('Europe/London'));
-		$dd = date_format($date, 'Y-m-d H:i:sP');
-		
-		$result = mysqli_query($sql,"INSERT INTO `noticias`(`id`, `titulo`, `img`, `noticia`,`data`) VALUES (".$_SESSION['userid'].",'".$titulo1."','".$img."','".$noticia1."','".$dd."')");
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		else{
-			mysqli_close($sql);
-			return true;
-		}
-		
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	}
-	return false;
-}
-
-function edit_pub($id, $titulo, $file, $dfile, $filename, $noticia){
-	if(testlog()){
-	require('vars.php');
-	$img = uploadimg($file, $dfile, $filename);
-	logreg("edit_pub", @$_SESSION['email'] . ", Titulo:" . $titulo . ", Noticia:" . $noticia . ", Img:" . $img);
-	if($img == false)
-		$img = $filename;
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$titulo1 = mysqli_real_escape_string($sql, $titulo);
-		$noticia1 = mysqli_real_escape_string($sql, $noticia);
-		$date = date_create(date('c'), timezone_open(date('e')));
-		date_timezone_set($date, timezone_open('Europe/London'));
-		$dd = date_format($date, 'Y-m-d H:i:sP');
-		
-		$result = mysqli_query($sql,"UPDATE `noticias` SET `titulo`='" . $titulo1 . "',`img`='" . $img . "',`noticia`='" . $noticia1 . "',`data`='" . $dd . "' WHERE `idn`=".$id);
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		else{
-			mysqli_close($sql);
-			return true;
-		}
-		
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	}
-	return false;
-}	
-
-function list_not($page=0,$vperpage=10){
-	require('vars.php');
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$result = mysqli_query($sql,"SELECT * FROM `noticias` WHERE 1");
-		$ll[0] = mysqli_num_rows($result);
-		$result = mysqli_query($sql,"SELECT * FROM `noticias` WHERE 1 ORDER BY `idn` DESC LIMIT ".$page*$vperpage." , ".$vperpage."");
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		else{
-			$i = 1;
-			while($rr = mysqli_fetch_array($result)){
-					$ll[$i] = array($rr['idn'], $rr['titulo'],$rr['img'],$rr['noticia'],$rr['data'],$rr['id'],$rr['idi'], $rr['mark']);
-					$i++;
-			}
-			return $ll;
-		}
-		
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	return false;
-}
 
 function delnot($id){
 	if(testlog()){
@@ -443,67 +649,5 @@ function delnot($id){
 	}
 	return false;		
 	
-}
-
-function id_not($id){
-	require('vars.php');
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	$ll = false;
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$result = mysqli_query($sql,"SELECT * FROM `noticias` WHERE `idn`=".$id);
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		else{
-			while($rr = mysqli_fetch_array($result)){
-				if($rr['idn'] == $id)
-					$ll = array($rr['idn'], $rr['titulo'],$rr['img'],$rr['noticia'],$rr['data'],$rr['id'],$rr['idi'],$rr['mark']);
-			}
-			return $ll;
-		}
-		
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	return false;
-}
-
-function reguser($email, $pass){
-	if(strlen($email)>5 && strlen($pass) >100){
-	logreg("reguser", "email:" . $email);
-	require('vars.php');
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$email = mysqli_real_escape_string($sql, $email);
-		$pass = mysqli_real_escape_string($sql, $pass);
-		$result = mysqli_query($sql,"INSERT INTO `users`(`email`, `pass`) VALUES ('".$email."','".$pass."')");
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		mysqli_close($sql);
-		return true;
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	}
-	return false;
 }
 ?>

@@ -1,14 +1,9 @@
 <?php
-    $setor_id = 0;
-    $list = total_w_setor_data(1000);
-    $last = count($list)-1;
+$list_s = get_setors_mode();
+for($i=0;$i< count($list_s);$i++){
+    $setor_id = $list_s[$i][0];
+    $list = w_setor_data($setor_id,1000);
 ?>
-<div class="card" style="width: 22rem;">
-  <div class="card-body">
-    <h5 class="card-title">Consumo total</h5>
-    <p class="card-title"><?php echo($list[$last][0]/1000);?> KWh</p>
-  </div>
-</div>
 
 <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart<?php echo($setor_id);?>" width="1490" height="629"
   style="display: block; width: 1490px; height: 629px;"></canvas>
@@ -26,7 +21,7 @@
       type: 'line',
       data: {
         datasets: [{
-          label: 'Consumos Totais',
+          label: 'Consumos do setor <?php echo(get_setor_id($setor_id)[2]);?>',
           data: [
           <?php
               for($j=0;$j< count($list);$j++){
@@ -63,3 +58,6 @@
 
 
 </script>
+<?php
+}
+?>
