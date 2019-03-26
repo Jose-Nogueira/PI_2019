@@ -1,29 +1,17 @@
-<div class="my-3 p-1 bg-white"></div>
+<?php
+$list = get_esps_info();
+for($i=0;$i< count($list);$i++){
+    $esp_id = $list[$i][0];
+    $esp_name = $list[$i][1];
+    $esp_gold = $list[$i][2];
+?>
+<form class="range-field my-4 w-50" method="post" enctype="multipart/form-data" action="#">
+<h5 class="card-title" style="padding-top: 15px;">Esp <?php echo $esp_name . ", atual gold: " . $esp_gold;?></h5>
 
-<div class="btn-group">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSectorButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Sector
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownSectorButton">
-            <a class="dropdown-item" href="#">1</a>
-            <a class="dropdown-item" href="#">2</a>
-        </div>
-    </div>
-    <div class="dropdown" style="padding-left: 5px">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSensorButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Sensor
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownSensorButton">
-            <a class="dropdown-item" href="#">3</a>
-            <a class="dropdown-item" href="#">4</a>
-        </div>
-    </div>
-</div>
-
-<h5 class="card-title" style="padding-top: 15px;">Target value</h5>
-
-<form class="range-field my-4 w-50">
-    <input type="range" class="custom-range" min="0" max="1024" id="customRange2">
-    <button type="button" class="btn btn-secondary">Set</button>
+    <input name ="new_gold" type="range" class="custom-range" min="0" max="1024" id="customRange2", value="<?php echo $esp_gold;?>">
+    <button type="button" class="btn btn-secondary" name="submit" value="<?php echo $esp_id;?>">Set</button>
 </form>
+
+<?php
+}
+?>
