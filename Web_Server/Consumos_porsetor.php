@@ -42,7 +42,7 @@ for($i=0;$i< count($list_s);$i++){
             type: 'time',
             unit: 'day',
             distribution: 'linear',
-            ticks: { source: 'data' },
+            ticks: { source: 'auto' },
             time: { displayFormats: { day: 'MMM DD' } }
           }]
         },

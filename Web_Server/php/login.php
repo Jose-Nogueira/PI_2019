@@ -407,8 +407,8 @@ function esp_data($id=0,$data_size=1000){
 		}
 		else{
 			$id_ = mysqli_real_escape_string($sql, $id);
-			$size = mysqli_real_escape_string($sql, data_size);
-			$result = mysqli_query($sql,"SELECT * FROM `esp_stats` WHERE `id`=".$id_." ORDER BY `id` DESC LIMIT ". 0 ." , ".$size."");
+			$size = mysqli_real_escape_string($sql, $data_size);
+			$result = mysqli_query($sql,"SELECT * FROM `esp_stats` WHERE `id_esp`=".$id_." ORDER BY `id` DESC LIMIT 0 , ".$size."");
 			if(!$result){
 				mysqli_close($sql);
 				return false;
@@ -480,7 +480,7 @@ function get_esp_id($id = 0){
 			}
 			else{
 				while($rr = mysqli_fetch_array($result)){
-						$ll = array($rr['id'], $rr['nome'], $rr['gold'], $rr['Setor_id']);
+						$ll = array($rr['id'], $rr['Nome'], $rr['gold'], $rr['Setor_id']);
 				}
 				return $ll;
 			}
