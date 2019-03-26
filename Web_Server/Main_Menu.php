@@ -100,6 +100,7 @@
         //else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");
         else if(@$_GET['pg'] == "sensorval") require("Sensor_values.php");
         else if(@$_GET['pg'] == "sensorstatus") require("sensor_conf.php");
+        else if(@$_GET['pg'] == "home") require("Setores_estado.php");
         ?>
       </main>
     </div>
