@@ -96,7 +96,7 @@
         <?php
         if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.php");
         else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.php");
-        //else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.html");
+        else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.php");
         else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");
         else if(@$_GET['pg'] == "sensorval") require("Sensor_values.php");
         //else if(@$_GET['pg'] == "sensorstatus") require("sensor_estado.html");
