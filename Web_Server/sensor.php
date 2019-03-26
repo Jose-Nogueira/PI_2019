@@ -25,7 +25,7 @@ break;
 }
 $result = mysqli_query($sql,"SELECT * FROM setor WHERE id_out_pin=".$id_setor);
 while($rr = mysqli_fetch_array($result)){
-if($rr['id'] == $id_setor){
+if($rr['id_out_pin'] == $id_setor){
 mysqli_close($sql);
 echo ("&mode:" . $rr["mode"]);
 $count++;
