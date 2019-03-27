@@ -107,7 +107,14 @@
       <script src="Chart.min.js"></script>
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
         <?php
-        if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.php");
+        if(isset($_GET['logout'])){
+          if(@$_GET['vr'] == "app"){
+?>
+<a  href="?logout=true"><input class="btn btn-secondary" type="submit" value="Logout"></a>
+<?php
+
+          }
+        }else if(@$_GET['pg'] == "consumossetor") require("Consumos_porsetor.php");
         else if(@$_GET['pg'] == "consumostotal") require("Consumos_totais.php");
         else if(@$_GET['pg'] == "setorstatus") require("Setores_estado.php");
         //else if(@$_GET['pg'] == "setorconf") require("Setores_conf.php");

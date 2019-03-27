@@ -5,7 +5,7 @@ for($i=0;$i< count($list_s);$i++){
     $list = w_setor_data($setor_id,1000);
 ?>
 
-<canvas class="my-4 w-100 chartjs-render-monitor" id="myChart<?php echo($setor_id);?>" width="1490" height="629"
+<canvas class="my-4 w-100 chartjs-render-monitor" id="myChart<?php echo($setor_id);?>" width="1490" height="<?php echo((@$_GET['vr'] == "app") ? "1629" : "629");?>"
   style="display: block; width: 1490px; height: 629px;"></canvas>
 
 <script>

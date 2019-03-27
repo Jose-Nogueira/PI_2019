@@ -7,8 +7,10 @@ if(!testlog()){
 }else{
     require("Main_Menu.php");
     if(isset($_GET['logout'])){
-        logout();
-        echo '<meta http-equiv="refresh" content="0; url=?n='.time().'" />';
+        if(@$_GET['vr'] != "app"){
+            logout();
+            echo '<meta http-equiv="refresh" content="0; url=?n='.time().'" />';
+        }
     }	
 }
 ob_end_flush();
