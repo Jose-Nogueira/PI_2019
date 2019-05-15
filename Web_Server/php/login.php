@@ -291,6 +291,98 @@ function total_w_setor_data($data_size=1000){
 }
 /////////////////////////////
 ///
+/// schedule functions
+///
+function get_ofline_times(){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$result = mysqli_query($sql,"SELECT * FROM `ofline_times`");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i=0;
+				while($rr = mysqli_fetch_array($result)){
+						$ll[$i] = array($rr['id'], $rr['start'], $rr['stop']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function del_schedule($id){
+	if(testlog()){
+		require('vars.php');
+		logreg("del_schedule", @$_SESSION['email'] . ", id:" . $id);
+	try{
+	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+	$list = '';
+	if(mysqli_connect_errno())
+	{
+		return false;
+	}
+	else{
+		$id_ = mysqli_real_escape_string($sql, $id);
+		$result = mysqli_query($sql,"DELETE FROM `ofline_times` WHERE `id`=" . $id_);
+		if(!$result){
+			mysqli_close($sql);
+			return false;
+		}
+		else{
+			mysqli_close($sql);
+			return true;
+		}
+		
+	}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	}
+	return false;		
+	
+}
+
+function add_schedule($start, $stop){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$start_ = mysqli_real_escape_string($sql, $start);
+			$stop_ = mysqli_real_escape_string($sql, $stop);
+			$result = mysqli_query($sql,"insert into `ofline_times`(`start`, `stop`) values ('".$start_."','".$stop_."') ");
+			if($result) return true;
+			return false;
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+
+/////////////////////////////
+///
 /// Setor functions
 ///
 function get_setors_mode(){
@@ -315,6 +407,37 @@ function get_setors_mode(){
 						$i++;
 				}
 				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+
+function get_setors_status($id = 0){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$result = mysqli_query($sql,"SELECT * FROM `status` WHERE `id_setor`=" . $id_. " ORDER BY `id` DESC LIMIT 1");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i=0;
+				while($rr = mysqli_fetch_array($result)){
+						return $rr['status'];
+				}
 			}
 			
 		}
@@ -391,12 +514,8 @@ function set_setor_mode($id=0, $mode="auto"){
 	}
 	return false;
 }
-/////////////////////////////
-///
-/// ESP functions
-///
 
-function esp_data($id=0,$data_size=1000){
+function setor_full_status($id=0,$start, $stop){
 	require('vars.php');
 	try{
 		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
@@ -407,8 +526,53 @@ function esp_data($id=0,$data_size=1000){
 		}
 		else{
 			$id_ = mysqli_real_escape_string($sql, $id);
-			$size = mysqli_real_escape_string($sql, $data_size);
-			$result = mysqli_query($sql,"SELECT * FROM `esp_stats` WHERE `id_esp`=".$id_." ORDER BY `id` DESC LIMIT 0 , ".$size."");
+			$start_ = mysqli_real_escape_string($sql, $start);
+			$stop_ = mysqli_real_escape_string($sql, $stop);
+			$result = mysqli_query($sql,"SELECT * FROM `status` WHERE `id_setor`=".$id_." and `time` >= '".$start_."' and `time` <= '".$stop_."' ORDER BY `id` DESC");
+			if(!$result){
+				mysqli_close($sql);
+				return false;
+			}
+			else{
+				$i = 0;
+				while($rr = mysqli_fetch_array($result)){
+					if($i>0){
+						$date=strtotime($rr['time'] . " +10 seconds");
+						$ll[$i] = array(date("Y-m-d H:i:s", $date), $ll[$i-1][1], $ll[$i-1][2]);
+						$i++;
+					}
+						$ll[$i] = array($rr['time'], $rr['status'], $rr['mode']);
+						$i++;
+				}
+				return $ll;
+			}
+			
+		}
+	}
+	catch(Exception $e){
+		return false;	
+	}
+	return false;
+}
+/////////////////////////////
+///
+/// ESP functions
+///
+
+function esp_data($id=0,$start, $stop){
+	require('vars.php');
+	try{
+		$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
+		$list = '';
+		if(mysqli_connect_errno())
+		{
+			return false;
+		}
+		else{
+			$id_ = mysqli_real_escape_string($sql, $id);
+			$start_ = mysqli_real_escape_string($sql, $start);
+			$stop_ = mysqli_real_escape_string($sql, $stop);
+			$result = mysqli_query($sql,"SELECT * FROM `esp_stats` WHERE `id_esp`=".$id_." and `time` >= '".$start_."' and `time` <= '".$stop_."' ORDER BY `id` DESC");
 			if(!$result){
 				mysqli_close($sql);
 				return false;
@@ -616,38 +780,5 @@ function antibot($id, $val){
 		return false;	
 	}
 	return false;	
-}
-
-
-function delnot($id){
-	if(testlog()){
-		require('vars.php');
-		logreg("delnot", @$_SESSION['email'] . ", id not:" . $id);
-	try{
-	$sql = mysqli_connect($sql_server,$sql_user,$sql_pass,$sql_bd);
-	$list = '';
-	if(mysqli_connect_errno())
-	{
-		return false;
-	}
-	else{
-		$result = mysqli_query($sql,"DELETE FROM `noticias` WHERE (`id`=" . $_SESSION['userid'] . ") AND (`idn`=" . $id . ")");
-		if(!$result){
-			mysqli_close($sql);
-			return false;
-		}
-		else{
-			mysqli_close($sql);
-			return true;
-		}
-		
-	}
-	}
-	catch(Exception $e){
-		return false;	
-	}
-	}
-	return false;		
-	
 }
 ?>

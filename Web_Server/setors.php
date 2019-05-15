@@ -8,6 +8,16 @@ try{
         return false;
     }
     else{
+        $result = mysqli_query($sql,"SELECT * FROM ofline_times");
+        $time_now = date("H:i:s");
+        while($rr = mysqli_fetch_array($result)){
+            if($time_now > $rr['start'] && $time_now < $rr['stop']){
+                echo("ofline_time");
+                return;
+            }
+        }
+
+
         $result = mysqli_query($sql,"SELECT * FROM setor");
         while($rr = mysqli_fetch_array($result)){
             echo ("!!id:". $rr['id_out_pin'] . "&mode:" . $rr["mode"]);
